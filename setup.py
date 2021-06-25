@@ -21,7 +21,7 @@ except ImportError:
         long_description = f.read()
 
 package_metadata = {
-    "name": "django-site-settings",
+    "name": "django-site-configs",
     "version": VERSION,
     "description": "A Django app that manages settings per-site on a multi-site setup.  These settings can be made avaialble to users of different sites or administerd via the Django admin.",
     "long_description": long_description,
