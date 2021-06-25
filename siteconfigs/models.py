@@ -26,7 +26,7 @@ class SiteConfigKeyModel(models.Model):
     )
     admin_only = models.BooleanField(
         _("Django Admin Only"),
-        help_text=_("Are these only allowed for people with Django Admin privilages?"),
+        help_text=_("Are these only editable by people with Django Admin privilages?"),
     )
     setting_type = models.IntegerField(
         _("Setting Type"), choices=SettingType.choices, blank=False, null=False
