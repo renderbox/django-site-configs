@@ -62,6 +62,8 @@ class SiteConfigModel(models.Model):
     value = models.JSONField(_("Value"), default=dict)
 
     # TODO: Create manager to get record by key slug
+    #       ideally it would look something like Site.config.get("some-key")
+    #       it should return a value or None, no matter wether or not the key is set for that site
 
     class Meta:
         verbose_name = _("Site Setting")
