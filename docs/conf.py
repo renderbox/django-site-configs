@@ -24,7 +24,7 @@ django.setup()
 # -- Project information -----------------------------------------------------
 
 project = 'Site Settings'
-copyright = '2020, Grant Viklund'
+copyright = '2021, Grant Viklund'
 author = 'Grant Viklund'
 
 # The full version, including alpha/beta/rc tags
