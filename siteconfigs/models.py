@@ -14,7 +14,7 @@ class SettingType(models.IntegerChoices):
     RESPONSE_META_TAG = 2, _("Response Meta Tag")
 
 
-class SiteSettingKeyModel(models.Model):
+class SiteConfigKeyModel(models.Model):
     label = models.CharField(_("Key Label"), max_length=120, blank=False, unique=True)
     key = models.SlugField(_("Key"), blank=True, editable=False, unique=True)
     schema = models.JSONField(_("Schema"), default=dict, null=True, blank=True)
@@ -44,9 +44,9 @@ class SiteSettingKeyModel(models.Model):
         super().save(*args, **kwargs)
 
 
-class SiteSettingModel(models.Model):
+class SiteConfigModel(models.Model):
     key = models.ForeignKey(
-        SiteSettingKeyModel,
+        SiteConfigKeyModel,
         verbose_name=_("Site Setting Key Name"),
         on_delete=models.CASCADE,
         help_text=_("What setting is this value for?"),

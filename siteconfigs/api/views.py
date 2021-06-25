@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-# from sitesettings.models import SampleModel 
-# from sitesettings.api.serializers import SampleModelSerializer
+# from siteconfigs.models import SampleModel
+# from siteconfigs.api.serializers import SampleModelSerializer
 
 
 # class SampleModelListAPIView(generics.ListAPIView):

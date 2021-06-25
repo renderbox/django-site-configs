@@ -7,7 +7,7 @@
 from os import path
 from setuptools import setup, find_packages
 
-from sitesettings.__version__ import VERSION
+from siteconfigs.__version__ import VERSION
 
 readme_file = path.join(path.dirname(path.abspath(__file__)), "README.md")
 
@@ -42,7 +42,7 @@ package_metadata = {
 setup(
     **package_metadata,
     packages=find_packages(),
-    package_data={"sitesettings": ["*.html"]},
+    package_data={"siteconfigs": ["*.html"]},
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=[

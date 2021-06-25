@@ -6,5 +6,4 @@
 
 from rest_framework import serializers, fields
 
-# from sitesettings.models import *
-
+# from siteconfigs.models import *

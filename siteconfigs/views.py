@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
 
-class SiteSettingsIndexView(TemplateView):
-    template_name = "sitesettings/index.html"
+
+class SiteConfigsIndexView(TemplateView):
+    template_name = "siteconfigs/index.html"

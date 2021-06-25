@@ -1,16 +1,16 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import SiteSettingKeyModel, SiteSettingModel
+from .models import SiteConfigKeyModel, SiteConfigModel
 
 
-class SiteSettingKeyModelAdmin(admin.ModelAdmin):
+class SiteConfigKeyModelAdmin(admin.ModelAdmin):
     readonly_fields = ["key"]
 
 
-class SiteSettingModelAdmin(admin.ModelAdmin):
+class SiteConfigModelAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(SiteSettingKeyModel, SiteSettingKeyModelAdmin)
-admin.site.register(SiteSettingModel, SiteSettingModelAdmin)
+admin.site.register(SiteConfigKeyModel, SiteConfigKeyModelAdmin)
+admin.site.register(SiteConfigModel, SiteConfigModelAdmin)
