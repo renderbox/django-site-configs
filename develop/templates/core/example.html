@@ -1,0 +1,17 @@
+{% extends "siteconfigs/base.html" %}
+
+{% block content %}
+<p>
+    Example Value:
+    {% if val.example %}
+    {{ val.example }}
+    {% else %}
+    None
+    {% endif %}
+</p>
+<form method="POST" action="{% url 'core-example' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+{% endblock %}
