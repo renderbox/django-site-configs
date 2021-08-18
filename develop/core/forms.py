@@ -2,7 +2,6 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.sites.models import Site
 
-from siteconfigs.models import SiteConfigModel
 from .config import ExampleClass
 
 
