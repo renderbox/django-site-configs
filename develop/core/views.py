@@ -24,5 +24,8 @@ class ExampleView(FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["val"] = ExampleClass().get_key_value()
+        config = ExampleClass()
+        val = config.get_key_value().get("example")
+        context["form"] = config.form_class(initial={"example": val})
+        context["val"] = val
         return context
