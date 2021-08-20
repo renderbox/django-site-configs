@@ -42,7 +42,7 @@ package_metadata = {
 setup(
     **package_metadata,
     packages=find_packages(),
-    package_data={"siteconfigs": ["*.html"]},
+    package_data={"siteconfigs": ["templates/siteconfigs/*.html"]},
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=[
