@@ -1,4 +1,4 @@
-name: Site Settings Develop
+name: Site Configs Develop
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
     #     env:
     #       POSTGRES_USER: postgres
     #       POSTGRES_PASSWORD: postgres
-    #       POSTGRES_DB: sitesettings
+    #       POSTGRES_DB: siteconfigs
     #     # Set health checks to wait until postgres has started
     #     ports:
     #       - 5432:5432
@@ -48,8 +48,8 @@ jobs:
     - name: Run Tests
       run: |
         cd develop
-        python manage.py test sitesettings
+        python manage.py test siteconfigs
         python manage.py makemigrations --check --dry-run
       env: 
         DJANGO_DEBUG: 1
-        # DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/sitesettings
+        # DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/siteconfigs
