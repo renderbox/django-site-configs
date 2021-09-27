@@ -17,7 +17,24 @@ class ExampleTests(TestCase):
         uri = reverse("core-example")
         response = self.client.post(uri, {"example": "Testing"})
         self.assertEqual(SiteConfigModel.objects.count(), 1)
-        config = SiteConfigModel.objects.first()
+        config = SiteConfigModel.objects.last()
         self.assertEqual(config.key, "core.config.ExampleClass")
         self.assertEqual(config.value, {"example": "Testing"})
         self.assertEqual(config.value, ExampleClass().get_key_value())
+
+    def test_save(self):
+        example = ExampleClass()
+        self.assertEqual(example.instance, None)
+        example.save("new value", "test key")
+        setting = SiteConfigModel.objects.last()
+        self.assertEqual(example.instance, setting)
+        self.assertEqual(example.value, setting.value)
+        self.assertEqual(example.value, {"test key": "new value"})
+
+    def test_delete(self):
+        ExampleClass().save("Testing", "example")
+        self.assertEqual(SiteConfigModel.objects.count(), 1)
+        ExampleClass().delete()
+        self.assertEqual(ExampleClass().instance, None)
+        self.assertEqual(ExampleClass().value, dict())
+        self.assertEqual(SiteConfigModel.objects.count(), 0)
