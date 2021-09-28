@@ -11,12 +11,7 @@ class ExampleView(FormView):
 
     def form_valid(self, form):
         result = super().form_valid(form)
-        site = Site.objects.get_current()
-        config, created = SiteConfigModel.objects.get_or_create(site=site, key="core.config.ExampleClass")
-        config.value = {
-            "example": form.cleaned_data["example"]
-        }
-        config.save()
+        ExampleClass().save(form.cleaned_data["example"], "example")
         return result
 
     def get_success_url(self):
