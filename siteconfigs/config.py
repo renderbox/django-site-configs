@@ -20,8 +20,10 @@ class SiteConfigBaseClass():
         except ObjectDoesNotExist:
             pass
 
-    def get_key_value(self):
-        if self.value:
+    def get_key_value(self, key=None):
+        if key:
+            return self.value.get(key, self.default.get(key))
+        elif self.value:
             return self.value
         return self.default
 
