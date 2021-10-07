@@ -11,7 +11,10 @@ class ExampleView(FormView):
 
     def form_valid(self, form):
         result = super().form_valid(form)
-        ExampleClass().save(form.cleaned_data["example"], "example")
+        if form.cleaned_data["example"]:
+            ExampleClass().save(form.cleaned_data["example"], "example")
+        else:
+            ExampleClass().delete()
         return result
 
     def get_success_url(self):
@@ -20,7 +23,7 @@ class ExampleView(FormView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         config = ExampleClass()
-        val = config.get_key_value().get("example")
+        val = config.get_key_value("example")
         context["form"] = config.form_class(initial={"example": val})
         context["val"] = val
         return context
