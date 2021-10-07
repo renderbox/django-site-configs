@@ -21,6 +21,7 @@ class ExampleTests(TestCase):
         self.assertEqual(config.key, "core.config.ExampleClass")
         self.assertEqual(config.value, {"example": "Testing"})
         self.assertEqual(config.value, ExampleClass().get_key_value())
+        self.assertEqual(config.value["example"], ExampleClass().get_key_value("example"))
 
     def test_save(self):
         example = ExampleClass()
