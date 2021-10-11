@@ -27,11 +27,16 @@ class SiteConfigBaseClass():
             return self.value
         return self.default
 
-    def save(self, data, value_key):
+    # can pass in a dictionary or a single key and value
+    # easier to accomodate settings with multiple values
+    def save(self, data, value_key = None):
         config, created = SiteConfigModel.objects.get_or_create(site=self.site, key=self.key)
-        config.value = {
-            value_key: data
-        }
+        if value_key:
+            config.value.update({
+                value_key: data
+            })
+        elif isinstance(data, dict):
+            config.value.update(data)
         config.save()
         self.instance = config
         self.value = config.value
