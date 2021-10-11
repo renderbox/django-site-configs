@@ -32,6 +32,14 @@ class ExampleTests(TestCase):
         self.assertEqual(example.value, setting.value)
         self.assertEqual(example.value, {"test key": "new value"})
 
+    def test_save_via_dict(self):
+        example = ExampleClass()
+        test_data = {"hello": "world", "test": "value"}
+        example.save(test_data)
+        self.assertEqual(example.value, test_data)
+        self.assertEqual(example.get_key_value("hello"), "world")
+        self.assertEqual(example.get_key_value("test"), "value")
+
     def test_delete(self):
         ExampleClass().save("Testing", "example")
         self.assertEqual(SiteConfigModel.objects.count(), 1)
