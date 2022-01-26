@@ -46,7 +46,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=[
-        "Django>=3.2,<=4.0",
+        "Django>=3.2,<4.1",
         "djangorestframework",
     ],
     extras_require={
