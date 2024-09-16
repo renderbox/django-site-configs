@@ -3,11 +3,12 @@ from django.urls import reverse
 from core.config import ExampleClass
 from .models import SiteConfigModel
 
+
 class ExampleTests(TestCase):
-    
+
     def setUp(self):
         self.client = Client()
-    
+
     def test_default_value(self):
         default = ExampleClass().get_key_value()
         self.assertEquals(default, {"example": "Default Value"})
@@ -16,12 +17,15 @@ class ExampleTests(TestCase):
         self.assertEqual(SiteConfigModel.objects.count(), 0)
         uri = reverse("core-example")
         response = self.client.post(uri, {"example": "Testing"})
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(SiteConfigModel.objects.count(), 1)
         config = SiteConfigModel.objects.last()
         self.assertEqual(config.key, "core.config.ExampleClass")
         self.assertEqual(config.value, {"example": "Testing"})
         self.assertEqual(config.value, ExampleClass().get_key_value())
-        self.assertEqual(config.value["example"], ExampleClass().get_key_value("example"))
+        self.assertEqual(
+            config.value["example"], ExampleClass().get_key_value("example")
+        )
 
     def test_save(self):
         example = ExampleClass()

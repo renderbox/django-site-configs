@@ -1,7 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from .models import SiteConfigModel
 
-class SiteConfigBaseClass():
+
+class SiteConfigBaseClass:
     key = None
     label = None
     site = None
@@ -12,6 +13,10 @@ class SiteConfigBaseClass():
     is_superuser_config = False
 
     def __init__(self, site, key):
+
+        # The key need needs to be based on the module path
+        # This is to avoid conflicts with other settings
+
         self.site = site
         try:
             site_conf = SiteConfigModel.objects.get(site=site, key=key)
@@ -29,12 +34,12 @@ class SiteConfigBaseClass():
 
     # can pass in a dictionary or a single key and value
     # easier to accomodate settings with multiple values
-    def save(self, data, value_key = None):
-        config, created = SiteConfigModel.objects.get_or_create(site=self.site, key=self.key)
+    def save(self, data, value_key=None):
+        config, created = SiteConfigModel.objects.get_or_create(
+            site=self.site, key=self.key
+        )
         if value_key:
-            config.value.update({
-                value_key: data
-            })
+            config.value.update({value_key: data})
         elif isinstance(data, dict):
             config.value.update(data)
         config.save()
@@ -46,5 +51,3 @@ class SiteConfigBaseClass():
             self.instance.delete()
             self.instance = None
             self.value = dict()
-
-    
