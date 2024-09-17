@@ -43,13 +43,16 @@ dev = [
     "toml",
 ]
 docs= [
-    "recommonmark",
-    "m2r",
-    "django_extensions",
     "coverage",
-    "Sphinx",
-    "rstcheck",
-    "sphinx-rtd-theme",
+]
+test = [
+    "black",
+    "flake8",
+    "flake8-black",
+    "mypy",
+    "bandit",
+    "isort",
+    "coverage",
 ]
 
 [project.urls]
