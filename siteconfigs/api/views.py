@@ -1,4 +1,4 @@
-from rest_framework import generics
+# from rest_framework import generics
 
 # from siteconfigs.models import SampleModel
 # from siteconfigs.api.serializers import SampleModelSerializer

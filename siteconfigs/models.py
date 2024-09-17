@@ -3,14 +3,13 @@
 # from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext as _
-from django.utils.text import slugify
 
 # from django.urls import reverse
 from django.contrib.sites.models import Site
 
 
 class SiteConfigModel(models.Model):
-    key = models.CharField(_("Key"), max_length=120, blank=False) # Path to module
+    key = models.CharField(_("Key"), max_length=120, blank=False)  # Path to module
     site = models.ForeignKey(
         Site,
         on_delete=models.CASCADE,
