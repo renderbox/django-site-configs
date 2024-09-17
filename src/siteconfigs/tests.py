@@ -17,7 +17,7 @@ class ExampleTests(TestCase):
         self.assertEqual(SiteConfigModel.objects.count(), 0)
         uri = reverse("core-example")
         response = self.client.post(uri, {"example": "Testing"})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(SiteConfigModel.objects.count(), 1)
         config = SiteConfigModel.objects.last()
         self.assertEqual(config.key, "core.config.ExampleClass")

@@ -5,6 +5,7 @@ from siteconfigs.models import SiteConfigModel
 from .config import ExampleClass
 from .forms import ExampleForm
 
+
 class ExampleView(FormView):
     template_name = "core/example.html"
     form_class = ExampleForm
