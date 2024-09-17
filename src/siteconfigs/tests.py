@@ -11,7 +11,7 @@ class ExampleTests(TestCase):
 
     def test_default_value(self):
         default = ExampleClass().get_key_value()
-        self.assertEquals(default, {"example": "Default Value"})
+        self.assertEqual(default, {"example": "Default Value"})
 
     def test_create_config(self):
         self.assertEqual(SiteConfigModel.objects.count(), 0)
