@@ -1,6 +1,6 @@
 from django.test import Client, TestCase
 from django.urls import reverse
-from core.config import ExampleClass
+from core.config import ExampleClass  # loaded with the Django app
 from .models import SiteConfigModel
 
 
@@ -11,13 +11,13 @@ class ExampleTests(TestCase):
 
     def test_default_value(self):
         default = ExampleClass().get_key_value()
-        self.assertEquals(default, {"example": "Default Value"})
+        self.assertEqual(default, {"example": "Default Value"})
 
     def test_create_config(self):
         self.assertEqual(SiteConfigModel.objects.count(), 0)
         uri = reverse("core-example")
         response = self.client.post(uri, {"example": "Testing"})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(SiteConfigModel.objects.count(), 1)
         config = SiteConfigModel.objects.last()
         self.assertEqual(config.key, "core.config.ExampleClass")
