@@ -1,53 +1,107 @@
+# from re import S
 from django.core.exceptions import ObjectDoesNotExist
 from .models import SiteConfigModel
+from django.conf import settings as django_settings
+from django.contrib.sites.models import Site
+
+
+# get this from a django settings file if it's set, otherwise default to a value
+SITE_CONFIG_NAME = getattr(
+    django_settings, "DJANGO_SITE_CONFIGS_SITE_CONFIG_NAME", "default"
+)
 
 
 class SiteConfigBaseClass:
-    key = None
-    label = None
-    site = None
-    instance = None
-    value = dict()
-    default = dict()
-    form_class = None
-    is_superuser_config = False
+    _key = None
+    _label = None
+    _site = None
+    _form_class = None  # convenience for the form class
+    _is_superuser_config = False
 
-    def __init__(self, site, key):
+    def __init__(self, site=None):
 
-        # The key need needs to be based on the module path
-        # This is to avoid conflicts with other settings
+        if not site:
+            # get the current site without needing to pass it in
+            site = Site.objects.get_current()
 
-        self.site = site
-        try:
-            site_conf = SiteConfigModel.objects.get(site=site, key=key)
-            self.instance = site_conf
-            self.value = site_conf.value
-        except ObjectDoesNotExist:
-            pass
+        self._site = site
 
-    def get_key_value(self, key=None):
-        if key:
-            return self.value.get(key, self.default.get(key))
-        elif self.value:
-            return self.value
-        return self.default
-
-    # can pass in a dictionary or a single key and value
-    # easier to accomodate settings with multiple values
-    def save(self, data, value_key=None):
-        config, created = SiteConfigModel.objects.get_or_create(
-            site=self.site, key=self.key
+        site_conf, created = SiteConfigModel.objects.get_or_create(
+            site=self._site, key=SITE_CONFIG_NAME
         )
-        if value_key:
-            config.value.update({value_key: data})
-        elif isinstance(data, dict):
-            config.value.update(data)
+
+        if created:  # if the site config is new, save the default values and return
+            self.save()
+            return
+
+        config_name = self.get_config_name()
+
+        if config_name in site_conf.value:
+            # read in the data dictionary
+            data = site_conf.value[config_name]["data"]
+            # set the attributes of this instance
+            for k, v in data.items():
+                setattr(self, k, v)
+
+            if "superuser" in site_conf.value[config_name]:
+                self._is_superuser_config = site_conf.value[config_name]["superuser"]
+
+        # read in each of the values and set the attribute of this instance if they exist
+        for k, v in site_conf.value.items():
+            setattr(self, k, v)
+
+    def get_config_name(self):
+        return ".".join([self.__class__.__module__, self.__class__.__name__])
+
+    def get_label(self):
+        return self._label
+
+    def get_form(self):
+        if self._form_class:
+            return self._form_class
+        return None
+
+    def save(self):
+
+        config, created = SiteConfigModel.objects.get_or_create(
+            site=self._site, key=SITE_CONFIG_NAME
+        )
+
+        # get the full module path name for the instance
+        config_name = self.get_config_name()
+
+        # get all the attributes of this instance as a dictionary
+        data = {
+            attr: getattr(self, attr)
+            for attr in dir(self)
+            if not callable(getattr(self, attr)) and not attr.startswith("_")
+        }
+
+        # if the config name is not in the value dictionary, add it
+        if config_name not in config.value:
+            config.value[config_name] = {}
+
+        # update the data dictionary with the new data
+        if "data" not in config.value[config_name]:
+            config.value[config_name]["data"] = data
+        else:
+            config.value[config_name]["data"].update(data)
+
+        # print(config.value)
+
         config.save()
-        self.instance = config
-        self.value = config.value
 
     def delete(self):
-        if self.instance:
-            self.instance.delete()
-            self.instance = None
-            self.value = dict()
+        """Delete the individual config from the site configs"""
+
+        try:
+            config = SiteConfigModel.objects.get(site=self._site, key=SITE_CONFIG_NAME)
+
+        except ObjectDoesNotExist:  # if there is nothing to delete, exit early
+            return
+
+        config_name = self.get_config_name()
+
+        if config_name in config.value:
+            del config.value[config_name]
+            config.save()

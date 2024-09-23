@@ -10,44 +10,64 @@ class ExampleTests(TestCase):
         self.client = Client()
 
     def test_default_value(self):
-        default = ExampleClass().get_key_value()
-        self.assertEqual(default, {"example": "Default Value"})
+        default = ExampleClass()
+        self.assertEqual(default.example, "Default Value")
 
     def test_create_config(self):
+        """Test that a config is created when called if it's missing"""
         self.assertEqual(SiteConfigModel.objects.count(), 0)
         uri = reverse("core-example")
         response = self.client.post(uri, {"example": "Testing"})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(SiteConfigModel.objects.count(), 1)
         config = SiteConfigModel.objects.last()
-        self.assertEqual(config.key, "core.config.ExampleClass")
-        self.assertEqual(config.value, {"example": "Testing"})
-        self.assertEqual(config.value, ExampleClass().get_key_value())
+        self.assertEqual(config.key, "default")
         self.assertEqual(
-            config.value["example"], ExampleClass().get_key_value("example")
+            config.value, {"core.config.ExampleClass": {"data": {"example": "Testing"}}}
         )
 
-    def test_save(self):
+    def test_adding_dynamic_attribute(self):
         example = ExampleClass()
-        self.assertEqual(example.instance, None)
-        example.save("new value", "test key")
-        setting = SiteConfigModel.objects.last()
-        self.assertEqual(example.instance, setting)
-        self.assertEqual(example.value, setting.value)
-        self.assertEqual(example.value, {"test key": "new value"})
+        example.new_value = "test_key"
+        example.save()
 
-    def test_save_via_dict(self):
+        setting = SiteConfigModel.objects.last()
+
+        self.assertEqual(
+            setting.value,
+            {
+                "core.config.ExampleClass": {
+                    "data": {"example": "Default Value", "new_value": "test_key"}
+                }
+            },
+        )
+
+    # need a test that will show it loading a value from the database
+    def test_loading_data(self):
+        """
+        A test that will show it loading a value from the database
+        """
         example = ExampleClass()
-        test_data = {"hello": "world", "test": "value"}
-        example.save(test_data)
-        self.assertEqual(example.value, test_data)
-        self.assertEqual(example.get_key_value("hello"), "world")
-        self.assertEqual(example.get_key_value("test"), "value")
+        example.example = "Testing"
+        example.save()
+
+        example_two = ExampleClass()
+        self.assertEqual(example_two.example, "Testing")
 
     def test_delete(self):
-        ExampleClass().save("Testing", "example")
+        """Test that a config is removed when called"""
+        ExampleClass().save()
         self.assertEqual(SiteConfigModel.objects.count(), 1)
+        self.assertEqual(
+            SiteConfigModel.objects.last().value,
+            {"core.config.ExampleClass": {"data": {"example": "Default Value"}}},
+        )
+        # check the value in the database
+
         ExampleClass().delete()
-        self.assertEqual(ExampleClass().instance, None)
-        self.assertEqual(ExampleClass().value, dict())
-        self.assertEqual(SiteConfigModel.objects.count(), 0)
+        self.assertEqual(SiteConfigModel.objects.count(), 1)
+        # check that the config is removed from the SiteConfig model
+        self.assertEqual(
+            SiteConfigModel.objects.last().value,
+            {},
+        )
