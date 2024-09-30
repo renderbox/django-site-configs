@@ -12,8 +12,11 @@ class ExampleView(FormView):
 
     def form_valid(self, form):
         result = super().form_valid(form)
+
+        exp = ExampleClass()
         if form.cleaned_data["example"]:
-            ExampleClass().save(form.cleaned_data["example"], "example")
+            exp.example = form.cleaned_data["example"]
+            exp.save()
         else:
             ExampleClass().delete()
         return result
