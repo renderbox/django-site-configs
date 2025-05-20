@@ -39,6 +39,8 @@ dev = [
     "django-allauth",
     "django-extensions",
     "toml",
+    "pytest",
+    "pytest-django",
 ]
 test = [
     "black",
@@ -48,6 +50,8 @@ test = [
     "bandit",
     "isort",
     "coverage",
+    "pytest",
+    "pytest-django",
 ]
 
 [project.urls]

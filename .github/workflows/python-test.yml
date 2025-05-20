@@ -64,10 +64,11 @@ jobs:
           python -m pip install -e ".[test]"
           python -m pip install "Django==${{ matrix.django-version }}"
 
-      - name: Test with Django Test
+      - name: Test with Pytest
         run: |
           cd develop
           python manage.py makemigrations --check --dry-run
-          python manage.py test siteconfigs
+          cd ..
+          poetry run pytest src/siteconfigs
         env:
           DJANGO_DEBUG: 1
