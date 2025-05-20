@@ -14,9 +14,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install black isort flake8
-      - run: black --check .
-      - run: isort --check-only .
-      - run: flake8 .
+      - run: black --check src
+      - run: isort --check-only src
+      - run: flake8 src
 
   migrations:
     name: Check Missing Migrations
@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .[test] # assumes extras_require for test deps
-      - run: python manage.py makemigrations --check --dry-run
+      - run: python develop/manage.py makemigrations --check --dry-run
 
   test:
     name: Django ${{ matrix.django-version }} on Python ${{ matrix.python-version }}
