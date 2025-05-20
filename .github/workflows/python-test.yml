@@ -68,6 +68,6 @@ jobs:
 
       - name: Test with Pytest
         run: |
-          python -m pytest src/siteconfigs
+          python -m pytest src/siteconfigs develop
         env:
           DJANGO_DEBUG: 1
