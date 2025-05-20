@@ -1,9 +1,9 @@
 # from re import S
-from django.core.exceptions import ObjectDoesNotExist
-from .models import SiteConfigModel
 from django.conf import settings as django_settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 
+from .models import SiteConfigModel
 
 # get this from a django settings file if it's set, otherwise default to a value
 SITE_CONFIG_NAME = getattr(

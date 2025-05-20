@@ -1,6 +1,7 @@
+from core.config import ExampleClass  # loaded with the Django app
 from django.test import Client, TestCase
 from django.urls import reverse
-from core.config import ExampleClass  # loaded with the Django app
+
 from .models import SiteConfigModel
 
 
