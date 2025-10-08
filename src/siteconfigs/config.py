@@ -12,20 +12,33 @@ SITE_CONFIG_NAME = getattr(
 
 
 class SiteConfigBaseClass:
+    """Base class for site configs.  This class should be extended by other classes to create
+    site configs.  The class will automatically load and save the config values to the site's
+    SiteConfigModel in the database.
+
+    The intent is that a SiteConfig is an object that has logic and attributes.  It is specific
+    to a site and is stored in a shared configuration table.  The SiteConfig can be extended
+    to add additional attributes and logic.  The SiteConfig can also be associated with a form
+    class to allow for easy editing of the config values in the Django admin or other
+    custom views.
+    """
+
     _key = None
     _label = None
     _site = None
     _form_class = None  # convenience for the form class
     _is_superuser_config = False
 
-    def __init__(self, site=None):
+    def __init__(self, site=None, key=None):
 
         if not site:
             # get the current site without needing to pass it in
             site = Site.objects.get_current()
 
+        self._key = key
         self._site = site
 
+        # get or create the site config model record
         site_conf, created = SiteConfigModel.objects.get_or_create(
             site=self._site, key=SITE_CONFIG_NAME
         )
