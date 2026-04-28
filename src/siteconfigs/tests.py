@@ -27,6 +27,12 @@ class ExampleTests(TestCase):
             config.value, {"core.config.ExampleClass": {"data": {"example": "Testing"}}}
         )
 
+    def test_example_view_get(self):
+        uri = reverse("core-example")
+        response = self.client.get(uri)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Default Value")
+
     def test_adding_dynamic_attribute(self):
         example = ExampleClass()
         example.new_value = "test_key"
